@@ -61,7 +61,7 @@ describe('Init', () => {
         });
         sinon.stub(File, 'updateOne').callsFake(() => {
             return {
-                exec: () => Promise.reject()
+                exec: () => Promise.resolve()
             };
         });
         sinon.stub(init.instance, 'fireNextLambda').callsFake(() => {
