@@ -35,38 +35,43 @@ const rawEvent = {
 };
 
 describe('Init', () => {
-    before(() => {
+    let sandbox;
+    beforeEach(() => {
+        sandbox = sinon.createSandbox();
         process.env.ENV = 'TEST';
-        sinon.stub(Organization, 'findOne').callsFake(() => {
+        sandbox.stub(Organization, 'findOne').callsFake(() => {
             return {
                 exec: () => Promise.resolve({subscriptionKey: rawEvent.body.subscriptionKey})
             };
         });
         
-        sinon.stub(Project, 'findOne').callsFake(() => {
+        sandbox.stub(Project, 'findOne').callsFake(() => {
             return {
                 exec: () => Promise.resolve({organizationId: rawEvent.body.organizationId})
             };
         });
         
-        sinon.stub(Folder, 'findOne').callsFake(() => {
+        sandbox.stub(Folder, 'findOne').callsFake(() => {
             return {
                 exec: () => Promise.resolve({organizationId: rawEvent.body.organizationId, projectId: rawEvent.body.projectId})
             };
         });
-        sinon.stub(File, 'findOne').callsFake(() => {
+        sandbox.stub(File, 'findOne').callsFake(() => {
             return {
                 exec: () => Promise.resolve({networks: ['FAKE-NETWORK']})
             };
         });
-        sinon.stub(File, 'updateOne').callsFake(() => {
+        sandbox.stub(File, 'updateOne').callsFake(() => {
             return {
                 exec: () => Promise.resolve()
             };
         });
-        sinon.stub(init.instance, 'fireNextLambda').callsFake(() => {
+        sandbox.stub(init.instance, 'fireNextLambda').callsFake(() => {
             return Promise.resolve()
         });
+    });
+    afterEach(() => {
+        sandbox.restore();
     });
     it('process.env.ENV should equal TEST', () => {
         assert.strictEqual(process.env.ENV, 'TEST');
@@ -81,5 +86,8 @@ describe('Init', () => {
         assert.strictEqual(rawEvent.body.subscriptionKey, init.instance.subscriptionKey);
         assert.strictEqual(rawEvent.body.attempts, init.instance.attempts);
         assert.strictEqual(rawEvent.body.network, init.instance.network);
+    });
+    it('Init should fail if organizationId is not found', () => {
+
     });
 });
