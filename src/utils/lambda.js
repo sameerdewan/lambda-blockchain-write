@@ -4,7 +4,7 @@ const {connectDB} = require('@poetry/mongoose');
 
 class Lambda {
     constructor() {
-        this.lambdas = [];
+        this.lambdas = ['init', 'push', 'success', 'error'];
         return {
             lambda: async (event) => {
                 try {
@@ -48,11 +48,23 @@ class Lambda {
         throw new Error('Lambda does not have a runLambda function set');
     }
     getNextLambda() {
-
+        const index = this.lambdas.findIndex(x => x === this.lambda);
+        const nextLambda = this.lambdas[index + 1];
+        if (typeof nextLambda === 'undefined' || nextLambda === null ) {
+            throw new Error(`There is no lambda following: ${this.lambda}`);
+        }
+        return nextLambda;
     }
     async fireNextLambda() {
         this.body.attempts = 0;
         await this.sqsMessage(this.body, this.getNextLambda()).send();
+    }
+    async reattempt() {
+        this.body.attempts += 1;
+        await this.sqsMessage(this.body, this.lambda).send();
+    }
+    async abort() {
+        
     }
 }
 
