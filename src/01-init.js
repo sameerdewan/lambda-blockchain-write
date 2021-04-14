@@ -8,12 +8,13 @@ class Init {
         return async (event) => {
             try {
                 this.initializeLambda(event);
-                await connectDB();
+                this.setUtils();
+                await this.runLambda();
             } catch (error) {
                 if (this.attempts <= 5) {
                     await this.reattempt();
                 } else {
-                    await this.abort();
+                    await this.abort(error);
                 }
             }
         };
@@ -26,7 +27,18 @@ class Init {
         this.subscriptionKey = body.subscriptionKey;
         this.attempts = body.attempts ? body.attempts : 0;
         this.network = body.network;
-        this.adapter = adapters[body.network];
+    }
+    setUtils() {
+        if (process.env.ENV === 'TEST') {
+            this.adapter = require('../utils/stubAdapter');
+            this.connectDB = require('../utils/stubConnectDB');
+        } else {
+            this.adapter = adapters[this.network];
+            this.connectDB = connectDB;
+        }
+    }
+    async runLambda() {
+
     }
 }
 
