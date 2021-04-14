@@ -8,7 +8,7 @@ class Init extends Lambda {
         await this.validateProject();
         await this.validateFolder();
         await this.handleFile();
-        // await this.fireNextLambda();
+        await this.fireNextLambda();
     }
     async validateOrganization() {
         const organization = await Organization.findOne({_id: this.organizationId}).exec();
@@ -73,7 +73,7 @@ class Init extends Lambda {
         if (exists === true) {
             await this.appendFile(file);
         } else {
-            // await this.createFile();
+            await this.createFile();
         }
     }
 }

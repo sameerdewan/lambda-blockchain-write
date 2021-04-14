@@ -47,6 +47,9 @@ describe('Init', () => {
                 exec: () => Promise.resolve()
             };
         });
+        sinon.stub(init.instance, 'fireNextLambda').callsFake(() => {
+            return Promise.resolve()
+        });
     });
     it('process.env.ENV should equal TEST', () => {
         assert.strictEqual(process.env.ENV, 'TEST');
