@@ -1,4 +1,5 @@
 'use strict';
+const {init} = require('../../src/01-init');
 
 class StubSQS {
     constructor(body, lambda) {
@@ -10,17 +11,17 @@ class StubSQS {
         params.MessageBody = JSON.stringify({message: this.body, lambda: this.lambda});
         return params;
     }
+    getLambda() {
+        if (this.lambda === 'init') {
+            return init;
+        }
+    }
     async send(success = true) {
-        const params = this._construct();
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                if (success === true) {
-                    resolve(params);
-                } else {
-                    reject('Some error occurred!');
-                }
-            }, 1000);
-        });
+        if (success === true) {
+            await this.getLambda().lambda({body: JSON.stringify(this.body)});
+        } else {
+            throw new Error('Some error occurred!');
+        }
     }
 }
 

@@ -12,9 +12,8 @@ class Lambda {
                     this.setUtils();
                     await this.runLambda();
                 } catch (error) {
-                    console.log(error)
-                    if (this.attempts <= 5) {
-                        await this.reattempt(event.body);
+                    if (this.attempts < 5) {
+                        await this.reattempt();
                     } else {
                         await this.abort(error);
                     }
@@ -66,8 +65,8 @@ class Lambda {
         this.body.attempts += 1;
         await new this.sqsMessage(this.body, this.lambda).send();
     }
-    async abort() {
-
+    async abort(error) {
+        throw error;
     }
 }
 

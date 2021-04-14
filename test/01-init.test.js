@@ -13,9 +13,12 @@ const event = {
         organizationId: '607714bc58d62e39be398e44',
         subscriptionKey: 'apikey1234abcdefghij0123456789',
         attempts: 0,
-        network: 'ethereum'
+        network: 'ethereum',
+        lambda: 'init'
     })
 };
+
+exports.event = event;
 
 const rawEvent = {
     body: {
@@ -26,7 +29,8 @@ const rawEvent = {
         organizationId: '607714bc58d62e39be398e44',
         subscriptionKey: 'apikey1234abcdefghij0123456789',
         attempts: 0,
-        network: 'ethereum'
+        network: 'ethereum',
+        lambda: 'init'
     }
 };
 
@@ -57,7 +61,7 @@ describe('Init', () => {
         });
         sinon.stub(File, 'updateOne').callsFake(() => {
             return {
-                exec: () => Promise.resolve()
+                exec: () => Promise.reject()
             };
         });
         sinon.stub(init.instance, 'fireNextLambda').callsFake(() => {
