@@ -12,6 +12,7 @@ class Lambda {
                     this.setUtils();
                     await this.runLambda();
                 } catch (error) {
+                    console.log(error)
                     if (this.attempts <= 5) {
                         await this.reattempt(event.body);
                     } else {
@@ -36,7 +37,8 @@ class Lambda {
     }
     setUtils() {
         if (process.env.ENV === 'TEST') {
-            this.adapter = require('../../test/utils/stubAdapter');
+            const StubAdapter = require('../../test/utils/stubAdapter');
+            this.adapter = new StubAdapter();
             this.connectDB = require('../../test/utils/stubConnectDB');
             this.sqsMessage = require('../../test/utils/stubSQS');
         } else {
@@ -57,14 +59,14 @@ class Lambda {
     }
     async fireNextLambda() {
         this.body.attempts = 0;
-        await this.sqsMessage(this.body, this.getNextLambda()).send();
+        await new this.sqsMessage(this.body, this.getNextLambda()).send();
     }
     async reattempt() {
         this.body.attempts += 1;
-        await this.sqsMessage(this.body, this.lambda).send();
+        await new this.sqsMessage(this.body, this.lambda).send();
     }
     async abort() {
-        
+
     }
 }
 
