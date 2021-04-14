@@ -1,23 +1,26 @@
 'use strict';
 const adapters = require('@poetry/adapters');
 const {connectDB} = require('@poetry/mongoose');
-const {Project, Folder, Organization, File} = require('@poetry/mongoose').schemas;
+// const {Project, Folder, Organization, File} = require('@poetry/mongoose').schemas;
 
 class Init {
     constructor() {
-        return async (event) => {
-            try {
-                this.initializeLambda(event);
-                this.setUtils();
-                await this.runLambda();
-            } catch (error) {
-                if (this.attempts <= 5) {
-                    await this.reattempt();
-                } else {
-                    await this.abort(error);
+        return {
+            lambda: async (event) => {
+                try {
+                    this.initializeLambda(event);
+                    this.setUtils();
+                    await this.runLambda();
+                } catch (error) {
+                    if (this.attempts <= 5) {
+                        await this.reattempt();
+                    } else {
+                        await this.abort(error);
+                    }
                 }
-            }
-        };
+            },
+            instance: this
+        }
     }
     initializeLambda({body}) {
         this.hash = body.hash;
@@ -42,4 +45,5 @@ class Init {
     }
 }
 
-exports.handler = new Init();
+exports.init = new Init();
+exports.handler = new Init().lambda;
