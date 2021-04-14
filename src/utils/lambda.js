@@ -24,16 +24,17 @@ class Lambda {
         }
     }
     initializeLambda({body}) {
-        this.body = body;
-        this.hash = body.hash;
-        this.fileName = body.fileName;
-        this.projectId = body.projectId;
-        this.folderId = body.folderId;
-        this.organizationId = body.organizationId;
-        this.subscriptionKey = body.subscriptionKey;
-        this.attempts = body.attempts ? body.attempts : 0;
-        this.network = body.network;
-        this.lambda = body.lambda;
+        const _body = JSON.parse(body);
+        this.body = _body;
+        this.hash = _body.hash;
+        this.fileName = _body.fileName;
+        this.projectId = _body.projectId;
+        this.folderId = _body.folderId;
+        this.organizationId = _body.organizationId;
+        this.subscriptionKey = _body.subscriptionKey;
+        this.attempts = _body.attempts ? _body.attempts : 0;
+        this.network = _body.network;
+        this.lambda = _body.lambda;
     }
     setUtils() {
         if (process.env.ENV === 'TEST') {
