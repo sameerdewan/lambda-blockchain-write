@@ -13,7 +13,7 @@ class Init {
                     await this.runLambda();
                 } catch (error) {
                     if (this.attempts <= 5) {
-                        await this.reattempt();
+                        await this.reattempt(event.body);
                     } else {
                         await this.abort(error);
                     }
@@ -35,6 +35,7 @@ class Init {
         if (process.env.ENV === 'TEST') {
             this.adapter = require('../utils/stubAdapter');
             this.connectDB = require('../utils/stubConnectDB');
+            this.sqsMessage = require('../utils/stubSQS');
         } else {
             this.adapter = adapters[this.network];
             this.connectDB = connectDB;
