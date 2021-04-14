@@ -1,10 +1,10 @@
 'use strict';
 const adapters = require('@poetry/adapters');
 const {connectDB} = require('@poetry/mongoose');
-// const {Project, Folder, Organization, File} = require('@poetry/mongoose').schemas;
 
 class Adapter {
     constructor() {
+        this.lambdas = [];
         return {
             lambda: async (event) => {
                 try {
@@ -23,6 +23,7 @@ class Adapter {
         }
     }
     initializeLambda({body}) {
+        this.body = body;
         this.hash = body.hash;
         this.projectId = body.projectId;
         this.folderId = body.folderId;
@@ -30,6 +31,7 @@ class Adapter {
         this.subscriptionKey = body.subscriptionKey;
         this.attempts = body.attempts ? body.attempts : 0;
         this.network = body.network;
+        this.lambda = body.lambda;
     }
     setUtils() {
         if (process.env.ENV === 'TEST') {
@@ -43,6 +45,13 @@ class Adapter {
     }
     async runLambda() {
         throw new Error('Lambda does not have a runLambda function set');
+    }
+    getNextLambda() {
+
+    }
+    async fireNextLambda() {
+        this.body.attempts = 0;
+        await this.sqsMessage(this.body, this.getNextLambda()).send();
     }
 }
 
