@@ -2,7 +2,7 @@
 const adapters = require('@poetry/adapters');
 const {connectDB} = require('@poetry/mongoose');
 
-class Adapter {
+class Lambda {
     constructor() {
         this.lambdas = [];
         return {
@@ -25,6 +25,7 @@ class Adapter {
     initializeLambda({body}) {
         this.body = body;
         this.hash = body.hash;
+        this.fileName = body.fileName;
         this.projectId = body.projectId;
         this.folderId = body.folderId;
         this.organizationId = body.organizationId;
@@ -55,4 +56,4 @@ class Adapter {
     }
 }
 
-module.exports = Adapter;
+module.exports = Lambda;
