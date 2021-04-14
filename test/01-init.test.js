@@ -15,6 +15,12 @@ const event = {
 };
 
 describe('Init', () => {
+    before(() => {
+        process.env.ENV = 'TEST';
+    });
+    it('process.env.ENV should equal TEST', () => {
+        assert.strictEqual(process.env.ENV, 'TEST');
+    });
     it('Lambda should be initialized with the correct values referenced on [this]', async () => {
         await init.lambda(event);
         assert.strictEqual(event.body.hash, init.instance.hash);
