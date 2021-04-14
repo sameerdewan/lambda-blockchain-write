@@ -1,0 +1,22 @@
+{
+  "name": "lambdas",
+  "version": "0.0.1",
+  "description": "Lambdas for the poetry systems network",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://poetrysystems@github.com/poetrysystems/lambdas.git"
+  },
+  "keywords": [
+    "poetrysystems"
+  ],
+  "author": "Sameer Dewan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/poetrysystems/lambdas/issues"
+  },
+  "homepage": "https://github.com/poetrysystems/lambdas#readme"
+}
