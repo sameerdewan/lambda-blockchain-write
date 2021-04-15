@@ -70,4 +70,4 @@ class Lambda {
     }
 }
 
-module.exports = Lambda;
+module.exports = {Lambda};

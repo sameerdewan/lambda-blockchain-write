@@ -1,8 +1,8 @@
 'use strict';
 const {Project, Folder, Organization, File} = require('@poetry/mongoose').schemas;
-const Lambda = require('./utils/lambda');
+const Poetry = require('./utils/lambda');
 
-class Init extends Lambda {
+class Init extends Poetry.Lambda {
     async runLambda() {
         await this.validateOrganization();
         await this.validateProject();
