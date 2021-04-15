@@ -36,11 +36,11 @@ const rawEvent = {
 };
 
 describe('Init', () => {
-    let sandbox, organization;
+    let sandbox;
     beforeEach(() => {
         sandbox = sinon.createSandbox();
         process.env.ENV = 'TEST';
-        organization = sandbox.stub(Organization, 'findOne').callsFake(() => {
+        sandbox.stub(Organization, 'findOne').callsFake(() => {
             return {
                 exec: () => Promise.resolve({subscriptionKey: rawEvent.body.subscriptionKey})
             };
