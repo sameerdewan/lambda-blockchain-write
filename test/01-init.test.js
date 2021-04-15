@@ -115,4 +115,13 @@ describe('Init', () => {
         });
         await rejects(init.lambda(event), {message: 'Project not found'});
     });
+    it('validateProject: Init should fail if project organizationId does not match event organizationId', async () => {
+        Project.findOne.restore();
+        sandbox.stub(Project, 'findOne').callsFake(() => {
+            return {
+                exec: () => Promise.resolve({organizationId: 'fake-organization-id'})
+            };
+        });
+        await rejects(init.lambda(event), {message: 'Organization does not match Project'});
+    });
 });
