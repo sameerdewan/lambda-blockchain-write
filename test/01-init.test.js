@@ -171,4 +171,20 @@ describe('Init', () => {
         });
         await init.lambda(event);
     });
+    it('handleFile: createFile should be called if file does not exist', async () => {
+        sandbox.spy(init.instance, 'appendFile');
+        sandbox.spy(init.instance, 'createFile');
+        sandbox.stub(init.instance, 'doesFileExist').callsFake(() => {
+            return {
+                exists: false,
+                file: undefined
+            };
+        });
+        sandbox.stub(File.prototype, 'save').callsFake(() => {
+            return Promise.resolve();
+        });
+        await init.lambda(event);
+        assert.isTrue(init.instance.createFile.calledOnce);
+        assert.isTrue(init.instance.appendFile.notCalled);
+    });
 });
