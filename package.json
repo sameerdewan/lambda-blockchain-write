@@ -4,7 +4,7 @@
   "description": "Lambdas for the poetry systems network",
   "main": "index.js",
   "scripts": {
-    "test": "nyc ./node_modules/mocha/bin/mocha --no-timeout"
+    "test": "nyc ./node_modules/mocha/bin/mocha"
   },
   "repository": {
     "type": "git",

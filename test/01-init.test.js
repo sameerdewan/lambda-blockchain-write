@@ -235,6 +235,12 @@ describe('Init', () => {
         await init.lambda(event);
         assert.isTrue(init.instance.fireNextLambda.calledOnce);
     });
+    it('sqsMessage should be called from fireNextLambda', async () => {
+        init.instance.fireNextLambda.restore();
+        sandbox.stub(init.instance.sqsMessage.prototype, 'send').callsFake(() => Promise.resolve());
+        await init.lambda(event);
+        assert.isTrue(init.instance.sqsMessage.prototype.send.calledOnce);
+    });
     it('<lambda:init> getNextLambda should return <lambda:push>', async () => {
         await init.lambda(event);
         assert.isTrue(init.instance.getNextLambda() == 'push');
