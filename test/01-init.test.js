@@ -1,6 +1,7 @@
 'use strict';
 const {Project, Folder, Organization, File} = require('@poetry/mongoose').schemas;
 const { assert } = require('chai');
+const rejects = require('assert').rejects;
 const sinon = require('sinon');
 const {init} = require('../src/01-init');
 
@@ -35,11 +36,11 @@ const rawEvent = {
 };
 
 describe('Init', () => {
-    let sandbox;
+    let sandbox, organization;
     beforeEach(() => {
         sandbox = sinon.createSandbox();
         process.env.ENV = 'TEST';
-        sandbox.stub(Organization, 'findOne').callsFake(() => {
+        organization = sandbox.stub(Organization, 'findOne').callsFake(() => {
             return {
                 exec: () => Promise.resolve({subscriptionKey: rawEvent.body.subscriptionKey})
             };
@@ -87,7 +88,13 @@ describe('Init', () => {
         assert.strictEqual(rawEvent.body.attempts, init.instance.attempts);
         assert.strictEqual(rawEvent.body.network, init.instance.network);
     });
-    it('Init should fail if organizationId is not found', () => {
-
+    it('Init should fail if organizationId is not found', async () => {
+        Organization.findOne.restore();
+        sandbox.stub(Organization, 'findOne').callsFake(() => {
+            return {
+                exec: () => Promise.resolve(undefined)
+            };
+        });
+        await rejects(init.lambda(event), {message: 'Organization not found'});
     });
 });
