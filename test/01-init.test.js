@@ -68,6 +68,11 @@ describe('Init', () => {
     it('process.env.ENV should equal TEST', () => {
         assert.strictEqual(process.env.ENV, 'TEST');
     });
+    it('runLambda should be called', async () => {
+        sandbox.spy(init.instance, 'runLambda');
+        await init.lambda(event);
+        assert.isTrue(init.instance.runLambda.calledOnce);
+    });
     it('Lambda should be initialized with the correct values referenced on [this]', async () => {
         await init.lambda(event);
         assert.strictEqual(rawEvent.body.hash, init.instance.hash);
@@ -78,6 +83,15 @@ describe('Init', () => {
         assert.strictEqual(rawEvent.body.subscriptionKey, init.instance.subscriptionKey);
         assert.strictEqual(rawEvent.body.attempts, init.instance.attempts);
         assert.strictEqual(rawEvent.body.network, init.instance.network);
+    });
+    it('If process.env.ENV is not TEST, adapter should be a production adapter', async () => {
+        process.env.ENV = 'PRODUCTION';
+        process.env.ETHEREUM_MNEMONIC = 'shoot culture universe roof index lonely predict win walnut pride spray enable wash essence gaze';
+        const Ethereum = require('@poetry/adapters').Ethereum;
+        const {abi, address} = require('../node_modules/@poetry/contracts/ethereum/appdata/contract.dev.json');
+        sandbox.stub(Ethereum.prototype, 'getAbiAndAddress').returns({abi, address});
+        await init.lambda(event);
+        assert.isTrue(init.instance.adapter instanceof Ethereum);
     });
     it('validateOrganization: Init should fail if organizationId is not found', async () => {
         Organization.findOne.restore();
@@ -216,5 +230,13 @@ describe('Init', () => {
         await init.lambda(event);
         assert.isTrue(init.instance.createFile.calledOnce);
         assert.isTrue(init.instance.appendFile.notCalled);
+    });
+    it('fireNextLambda should fire', async () => {
+        await init.lambda(event);
+        assert.isTrue(init.instance.fireNextLambda.calledOnce);
+    });
+    it('<lambda:init> getNextLambda should return <lambda:push>', async () => {
+        await init.lambda(event);
+        assert.isTrue(init.instance.getNextLambda() == 'push');
     });
 });

@@ -42,12 +42,9 @@ class Lambda {
             this.connectDB = require('../../test/utils/stubConnectDB');
             this.sqsMessage = require('../../test/utils/stubSQS');
         } else {
-            this.adapter = adapters[this.network];
+            this.adapter = new adapters[this.network.charAt(0).toUpperCase() + this.network.slice(1)];
             this.connectDB = connectDB;
         }
-    }
-    async runLambda() {
-        throw new Error('Lambda does not have a runLambda function set');
     }
     getNextLambda() {
         const index = this.lambdas.findIndex(x => x === this.lambda);
