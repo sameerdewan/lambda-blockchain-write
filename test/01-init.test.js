@@ -106,4 +106,13 @@ describe('Init', () => {
         });
         await rejects(init.lambda(event), {message: 'Subscription Key does not match Organization'});
     });
+    it('validateProject: Init should fail if projectId is not found', async () => {
+        Project.findOne.restore();
+        sandbox.stub(Project, 'findOne').callsFake(() => {
+            return {
+                exec: () => Promise.resolve(undefined)
+            };
+        });
+        await rejects(init.lambda(event), {message: 'Project not found'});
+    });
 });
