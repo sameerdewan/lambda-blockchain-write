@@ -133,4 +133,22 @@ describe('Init', () => {
         });
         await rejects(init.lambda(event), {message: 'Folder not found'});
     });
+    it('validateFolder: Init should fail if folder projectId does not match event projectId', async () => {
+        Folder.findOne.restore();
+        sandbox.stub(Folder, 'findOne').callsFake(() => {
+            return {
+                exec: () => Promise.resolve({projectId: 'fake-project-id'})
+            };
+        });
+        await rejects(init.lambda(event), {message: 'Project does not match Folder'});
+    });
+    it('validateFolder: Init should fail if folder organizationId does not match event organizationId', async () => {
+        Folder.findOne.restore();
+        sandbox.stub(Folder, 'findOne').callsFake(() => {
+            return {
+                exec: () => Promise.resolve({projectId: rawEvent.body.projectId, organizationId: 'fake-organization-id'})
+            };
+        });
+        await rejects(init.lambda(event), {message: 'Organization does not match Folder'});
+    });
 });
