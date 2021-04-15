@@ -153,4 +153,22 @@ describe('Init', () => {
         assert.isTrue(init.instance.appendFile.calledWith({networks: [{name: 'fake-network'}]}));
         assert.isTrue(init.instance.createFile.notCalled);
     });
+    it('handleFile: appendFile fail if network is found and network.status !== permanently_failed', async () => {
+        File.findOne.restore();
+        sandbox.stub(File, 'findOne').callsFake(() => {
+            return {
+                exec: () => Promise.resolve({networks: [{name: rawEvent.body.network, status: 'fake-status'}]})
+            };
+        });
+        await rejects(init.lambda(event), {message: 'The file already exists on network: ethereum'});
+    });
+    it('handleFile: appendFile succeeds if network is found and network.status === permanently_failed', async () => {
+        File.findOne.restore();
+        sandbox.stub(File, 'findOne').callsFake(() => {
+            return {
+                exec: () => Promise.resolve({networks: [{name: rawEvent.body.network, status: 'permanently_failed'}]})
+            };
+        });
+        await init.lambda(event);
+    });
 });
