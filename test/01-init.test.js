@@ -59,7 +59,7 @@ describe('Init', () => {
         });
         sandbox.stub(File, 'findOne').callsFake(() => {
             return {
-                exec: () => Promise.resolve({networks: ['FAKE-NETWORK']})
+                exec: () => Promise.resolve({networks: [{name: 'fake-network'}]})
             };
         });
         sandbox.stub(File, 'updateOne').callsFake(() => {
@@ -150,5 +150,19 @@ describe('Init', () => {
             };
         });
         await rejects(init.lambda(event), {message: 'Organization does not match Folder'});
+    });
+    it('handleFile: appendFile should be called if file exists', async () => {
+        sandbox.spy(init.instance, 'appendFile');
+        sandbox.spy(init.instance, 'createFile');
+        sandbox.stub(init.instance, 'doesFileExist').callsFake(() => {
+            return {
+                exists: true,
+                file: {networks: [{name: 'fake-network'}]}
+            };
+        });
+        await init.lambda(event);
+        assert.isTrue(init.instance.appendFile.calledOnce);
+        assert.isTrue(init.instance.appendFile.calledWith({networks: [{name: 'fake-network'}]}));
+        assert.isTrue(init.instance.createFile.notCalled);
     });
 });
