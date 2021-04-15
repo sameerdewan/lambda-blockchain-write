@@ -97,4 +97,13 @@ describe('Init', () => {
         });
         await rejects(init.lambda(event), {message: 'Organization not found'});
     });
+    it('Init should fail if organization subscriptionKey does not match event subscriptionKey', async () => {
+        Organization.findOne.restore();
+        sandbox.stub(Organization, 'findOne').callsFake(() => {
+            return {
+                exec: () => Promise.resolve({subscriptionKey: 'fake-subscription-key'})
+            };
+        });
+        await rejects(init.lambda(event), {message: 'Subscription Key does not match Organization'});
+    });
 });
