@@ -88,7 +88,7 @@ describe('Init', () => {
         assert.strictEqual(rawEvent.body.attempts, init.instance.attempts);
         assert.strictEqual(rawEvent.body.network, init.instance.network);
     });
-    it('Init should fail if organizationId is not found', async () => {
+    it('validateOrganization: Init should fail if organizationId is not found', async () => {
         Organization.findOne.restore();
         sandbox.stub(Organization, 'findOne').callsFake(() => {
             return {
@@ -97,7 +97,7 @@ describe('Init', () => {
         });
         await rejects(init.lambda(event), {message: 'Organization not found'});
     });
-    it('Init should fail if organization subscriptionKey does not match event subscriptionKey', async () => {
+    it('validateOrganization: Init should fail if organization subscriptionKey does not match event subscriptionKey', async () => {
         Organization.findOne.restore();
         sandbox.stub(Organization, 'findOne').callsFake(() => {
             return {
