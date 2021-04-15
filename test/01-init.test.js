@@ -1,6 +1,9 @@
 'use strict';
 const {Project, Folder, Organization, File} = require('@poetry/mongoose').schemas;
-const { assert } = require('chai');
+const chai = require('chai');
+const chaiAsPromised = require('chai-as-promised');
+chai.use(chaiAsPromised);
+const {assert, expect} = chai;
 const rejects = require('assert').rejects;
 const sinon = require('sinon');
 const {init} = require('../src/01-init');
@@ -138,6 +141,33 @@ describe('Init', () => {
             };
         });
         await rejects(init.lambda(event), {message: 'Organization does not match Folder'});
+    });
+    it('handleFile: doesFileExist should return payload of {exists, file} for a not found File', async () => {
+        File.findOne.restore();
+        sandbox.spy(init.instance, 'doesFileExist');
+        sandbox.stub(File, 'findOne').callsFake(() => {
+            return {
+                exec: () => Promise.resolve(undefined)
+            };
+        });
+        sandbox.stub(File.prototype, 'save').callsFake(() => {
+            return Promise.resolve();
+        });
+        await init.lambda(event);
+        assert.isTrue(init.instance.doesFileExist.calledOnce);
+        await expect(init.instance.doesFileExist.firstCall.returnValue).to.eventually.deep.equal({exists: false, file: undefined});
+    });
+    it('handleFile: doesFileExist should return payload of {exists, file} for a found File', async () => {
+        File.findOne.restore();
+        sandbox.spy(init.instance, 'doesFileExist');
+        sandbox.stub(File, 'findOne').callsFake(() => {
+            return {
+                exec: () => Promise.resolve({networks: [{name: 'fake-network'}]})
+            };
+        });
+        await init.lambda(event);
+        assert.isTrue(init.instance.doesFileExist.calledOnce);
+        await expect(init.instance.doesFileExist.firstCall.returnValue).to.eventually.deep.equal({exists: true, file: {networks: [{name: 'fake-network'}]}});
     });
     it('handleFile: appendFile should be called if file exists', async () => {
         sandbox.spy(init.instance, 'appendFile');
