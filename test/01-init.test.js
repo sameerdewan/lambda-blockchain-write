@@ -5,22 +5,6 @@ const rejects = require('assert').rejects;
 const sinon = require('sinon');
 const {init} = require('../src/01-init');
 
-const event = {
-    body: JSON.stringify({
-        hash: '17922b3e429fac38dce5c71a00325daa0733ae5e1c2bd3d1c8e0ef0e3a2e261b',
-        fileName: 'file.pdf',
-        projectId: '607714a8dd1404e6ada8239a',
-        folderId: '607714b3deea8050f3cd30a8',
-        organizationId: '607714bc58d62e39be398e44',
-        subscriptionKey: 'apikey1234abcdefghij0123456789',
-        attempts: 0,
-        network: 'ethereum',
-        lambda: 'init'
-    })
-};
-
-exports.event = event;
-
 const rawEvent = {
     body: {
         hash: '17922b3e429fac38dce5c71a00325daa0733ae5e1c2bd3d1c8e0ef0e3a2e261b',
@@ -33,6 +17,10 @@ const rawEvent = {
         network: 'ethereum',
         lambda: 'init'
     }
+};
+
+const event = {
+    body: JSON.stringify(rawEvent.body)
 };
 
 describe('Init', () => {
