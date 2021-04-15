@@ -124,4 +124,13 @@ describe('Init', () => {
         });
         await rejects(init.lambda(event), {message: 'Organization does not match Project'});
     });
+    it('validateFolder: Init should fail if folderId is not found', async () => {
+        Folder.findOne.restore();
+        sandbox.stub(Folder, 'findOne').callsFake(() => {
+            return {
+                exec: () => Promise.resolve(undefined)
+            };
+        });
+        await rejects(init.lambda(event), {message: 'Folder not found'});
+    });
 });
