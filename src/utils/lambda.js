@@ -4,7 +4,7 @@ const {connectDB} = require('@poetry/mongoose');
 
 class Lambda {
     constructor() {
-        this.lambdas = ['init', 'push', 'success', 'error'];
+        this.lambdas = ['init', 'push', 'success'];
         return {
             lambda: async (event) => {
                 try {

@@ -239,4 +239,9 @@ describe('Init', () => {
         await init.lambda(event);
         assert.isTrue(init.instance.getNextLambda() == 'push');
     });
+    it('getNextLambda should fail if the lambda calling is <lambda:success>', async () => {
+        await init.lambda(event);
+        init.instance.lambda = 'success';
+        expect(() => init.instance.getNextLambda()).to.throw('There is no lambda following: success');
+    });
 });
