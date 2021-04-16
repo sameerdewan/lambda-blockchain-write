@@ -4,6 +4,7 @@ const Poetry = require('./utils/lambda');
 
 class Init extends Poetry.Lambda {
     async runLambda() {
+        await this.connectDB();
         await this.validateOrganization();
         await this.validateProject();
         await this.validateFolder();

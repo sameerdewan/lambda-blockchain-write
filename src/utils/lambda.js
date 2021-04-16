@@ -44,7 +44,7 @@ class Lambda {
             this.sqsMessage = require('../../test/utils/stubSQS');
         } else {
             this.adapter = new adapters[this.network.charAt(0).toUpperCase() + this.network.slice(1)];
-            this.connectDB = connectDB;
+            this.connectDB = this.forceTest ? require('../../test/utils/stubConnectDB') : connectDB;
         }
     }
     getNextLambda() {

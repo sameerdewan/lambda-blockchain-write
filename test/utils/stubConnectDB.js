@@ -1,15 +1,10 @@
 'use strict';
 
 function stubConnectDB(success = true) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            if (success === true) {
-                resolve();
-            } else {
-                reject();
-            }
-        }, 1000);
-    });
+    if (success === true) {
+        return Promise.resolve();
+    }
+    return Promise.reject();
 }
 
 module.exports = stubConnectDB;

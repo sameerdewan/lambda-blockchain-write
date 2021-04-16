@@ -92,8 +92,14 @@ describe('Init', () => {
         const Ethereum = require('@poetry/adapters').Ethereum;
         const {abi, address} = require('../node_modules/@poetry/contracts/ethereum/appdata/contract.dev.json');
         sandbox.stub(Ethereum.prototype, 'getAbiAndAddress').returns({abi, address});
+        init.instance.forceTest = true;
         await init.lambda(event);
         assert.isTrue(init.instance.adapter instanceof Ethereum);
+        const stubConnectDB = require('./utils/stubConnectDB');
+        assert.isTrue(init.instance.connectDB.toString() == stubConnectDB.toString());
+        init.instance.forceTest = false;
+        init.instance.setUtils();
+        assert.isTrue(init.instance.connectDB.toString() != stubConnectDB.toString());
     });
     it('validateOrganization: Init should fail if organizationId is not found', async () => {
         Organization.findOne.restore();
