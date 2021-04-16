@@ -86,7 +86,7 @@ describe('Init', () => {
         assert.strictEqual(rawEvent.body.withIdentity, init.instance.withIdentity);
         assert.strictEqual(rawEvent.body.network, init.instance.network);
     });
-    it('If process.env.ENV is not TEST, adapter should be a production adapter', async () => {
+    it('If process.env.ENV is not TEST, adapter should be a production adapter and connectDB should be production connectDB', async () => {
         process.env.ENV = 'PRODUCTION';
         process.env.ETHEREUM_MNEMONIC = 'shoot culture universe roof index lonely predict win walnut pride spray enable wash essence gaze';
         const Ethereum = require('@poetry/adapters').Ethereum;
