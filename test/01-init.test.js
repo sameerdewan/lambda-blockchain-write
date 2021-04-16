@@ -18,7 +18,8 @@ const rawEvent = {
         subscriptionKey: 'apikey1234abcdefghij0123456789',
         attempts: 0,
         network: 'ethereum',
-        lambda: 'init'
+        lambda: 'init',
+        withIdentity: false
     }
 };
 
@@ -82,6 +83,7 @@ describe('Init', () => {
         assert.strictEqual(rawEvent.body.organizationId, init.instance.organizationId);
         assert.strictEqual(rawEvent.body.subscriptionKey, init.instance.subscriptionKey);
         assert.strictEqual(rawEvent.body.attempts, init.instance.attempts);
+        assert.strictEqual(rawEvent.body.withIdentity, init.instance.withIdentity);
         assert.strictEqual(rawEvent.body.network, init.instance.network);
     });
     it('If process.env.ENV is not TEST, adapter should be a production adapter', async () => {

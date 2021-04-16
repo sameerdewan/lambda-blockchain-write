@@ -33,6 +33,7 @@ class Lambda {
         this.subscriptionKey = _body.subscriptionKey;
         this.attempts = _body.attempts ? _body.attempts : 0;
         this.network = _body.network;
+        this.withIdentity = _body.withIdentity || false;
         this.lambda = _body.lambda;
     }
     setUtils() {
