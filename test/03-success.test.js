@@ -2,7 +2,7 @@ const {File} = require('@poetry/mongoose').schemas;
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
-const {assert, expect} = chai;
+const {assert} = chai;
 const sinon = require('sinon');
 const {success} = require('../src/03-success');
 
