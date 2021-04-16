@@ -4,7 +4,8 @@
   "description": "Lambdas for the poetry systems network",
   "main": "index.js",
   "scripts": {
-    "test": "nyc ./node_modules/mocha/bin/mocha"
+    "test": "nyc ./node_modules/mocha/bin/mocha",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,7 @@
   "devDependencies": {
     "chai": "^4.3.4",
     "eslint": "^7.23.0",
+    "husky": "^6.0.0",
     "nyc": "^15.1.0",
     "sinon": "^10.0.0"
   }
