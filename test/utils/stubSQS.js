@@ -1,5 +1,6 @@
 'use strict';
 const {init} = require('../../src/01-init');
+const {push} = require('../../src/02-push');
 
 class StubSQS {
     constructor(body, lambda) {
@@ -14,6 +15,9 @@ class StubSQS {
     getLambda() {
         if (this.lambda === 'init') {
             return init;
+        }
+        if (this.lambda === 'push') {
+            return push;
         }
     }
     async send(success = true) {
