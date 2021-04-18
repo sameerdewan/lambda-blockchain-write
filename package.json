@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "nyc --reporter=lcov ./node_modules/mocha/bin/mocha",
-    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
+    "coverage": "nyc --reporter=lcov mocha && codecov",
     "prepare": "husky install"
   },
   "repository": {
