@@ -36,4 +36,5 @@ jobs:
         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
       run: npm ci
     - run: npm test
+    - run: npm i -g mocha codecov
     - run: npm run coverage
