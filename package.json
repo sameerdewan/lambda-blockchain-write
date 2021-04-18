@@ -21,8 +21,8 @@
   },
   "homepage": "https://github.com/poetrysystems/lambdas#readme",
   "dependencies": {
-    "@poetry/adapters": "git+https://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:x-oath0basic@github.com:poetrysystems/adapters.git",
-    "@poetry/mongoose": "git+https://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:x-oath0basic@github.com:poetrysystems/mongoose.git",
+    "@poetry/adapters": "git+https://poetrysystems@github.com:poetrysystems/adapters.git",
+    "@poetry/mongoose": "git+ssh://poetrysystems@github.com:poetrysystems/mongoose.git",
     "aws-sdk": "^2.880.0",
     "aws-xray-sdk": "^3.2.0",
     "axios": "0.21.1",
