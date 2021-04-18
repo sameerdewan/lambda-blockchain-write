@@ -39,5 +39,5 @@ jobs:
     - run: npm i -g mocha codecov
     - name: Run Coverage
       env:
-        CODECOV_TOKEN: 63f42294-26ac-4aa4-bcac-c39842684205
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       run: npm run coverage
